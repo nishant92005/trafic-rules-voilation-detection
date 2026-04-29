@@ -75,7 +75,6 @@ $env:GROQ_MODEL="llama3-8b-8192"
 This repo is configured for Render with:
 
 - `requirements.txt`
-- `.python-version`
 - `render.yaml`
 - a health endpoint at `/healthz`
 
@@ -103,7 +102,17 @@ PYTHON_VERSION=3.11.11
 
 ### Important deployment notes
 
-- Render's current default Python version is `3.14.3`, so this project pins Python `3.11` because PyTorch/Ultralytics is more reliable there.
+- Render can use the `PYTHON_VERSION=3.11.11` value from `render.yaml`, which is the recommended deployment target for this project.
 - `uploads/` and `outputs/` are ephemeral on Render unless you attach a persistent disk.
 - If you want processed videos and snapshots to survive restarts and redeploys, add a persistent disk in Render.
 - This project uses YOLO and OpenCV, so a paid Render instance is more realistic than a tiny free instance for video processing workloads.
+
+## Deploy on Vercel
+
+This repo now includes `vercel.json` and a Vercel-compatible `.python-version` (`3.12`) so builds can start correctly on Vercel.
+
+Important limitations still apply:
+
+- Vercel is best for lightweight Flask apps, not long-running video inference workloads.
+- Large video uploads, generated output files, and YOLO/OpenCV processing may still hit Vercel platform limits.
+- For reliable full-stack deployment of this project, Render remains the recommended backend host.
