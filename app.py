@@ -12,8 +12,9 @@ load_env()
 
 
 BASE_DIR = Path(__file__).resolve().parent
-UPLOAD_DIR = BASE_DIR / "uploads"
-OUTPUT_DIR = BASE_DIR / "outputs"
+RUNTIME_DIR = Path(os.getenv("VERCEL_RUNTIME_DIR", "/tmp" if os.getenv("VERCEL") else BASE_DIR))
+UPLOAD_DIR = RUNTIME_DIR / "uploads"
+OUTPUT_DIR = RUNTIME_DIR / "outputs"
 SNAPSHOT_DIR = OUTPUT_DIR / "snapshots"
 
 for directory in (UPLOAD_DIR, OUTPUT_DIR, SNAPSHOT_DIR):
