@@ -63,6 +63,19 @@ $env:GROQ_API_KEY="your_groq_api_key"
 $env:GROQ_MODEL="llama3-8b-8192"
 ```
 
+Speed/quality tuning:
+
+```powershell
+$env:DETECTION_FRAME_SKIP="5"
+$env:DETECTION_INFERENCE_WIDTH="480"
+$env:DETECTION_CONFIDENCE="0.35"
+$env:ENABLE_EMAIL_ALERTS="0"
+```
+
+- Increase `DETECTION_FRAME_SKIP` for faster analysis. Use `3` for better accuracy, `8` or `10` for faster demos.
+- Lower `DETECTION_INFERENCE_WIDTH` for faster analysis. Use `416` for speed, `640` for better detection quality.
+- Set `ENABLE_EMAIL_ALERTS=1` only when you need SMTP alerts, because email/GROQ calls add extra waiting time.
+
 ## Notes
 
 - The first detection run may download `yolov8n.pt` if it is not already cached.

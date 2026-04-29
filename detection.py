@@ -19,6 +19,22 @@ from email_alert import send_violation_alert
 
 
 COCO_MODEL = None
+PERSON_CLASS_ID = 0
+MOTORCYCLE_CLASS_ID = 3
+
+
+def _env_int(name: str, default: int, minimum: int = 1) -> int:
+    try:
+        return max(minimum, int(os.getenv(name, str(default))))
+    except ValueError:
+        return default
+
+
+def _env_float(name: str, default: float, minimum: float = 0.0) -> float:
+    try:
+        return max(minimum, float(os.getenv(name, str(default))))
+    except ValueError:
+        return default
 
 
 def _get_model():
@@ -140,6 +156,57 @@ def _associate_people_to_bikes(
     return groups
 
 
+def _run_detection(
+    model,
+    frame: np.ndarray,
+    inference_width: int,
+    confidence_threshold: float,
+) -> Tuple[List[Dict[str, object]], List[Dict[str, List[float]]], List[Dict[str, object]]]:
+    height, width = frame.shape[:2]
+    scale = 1.0
+    infer_frame = frame
+
+    if inference_width > 0 and width > inference_width:
+        scale = inference_width / width
+        infer_height = max(1, int(height * scale))
+        infer_frame = cv2.resize(frame, (inference_width, infer_height), interpolation=cv2.INTER_AREA)
+
+    results = model(
+        infer_frame,
+        verbose=False,
+        imgsz=inference_width if inference_width > 0 else 640,
+        classes=[PERSON_CLASS_ID, MOTORCYCLE_CLASS_ID],
+    )[0]
+
+    people = []
+    motorcycles = []
+
+    for box in results.boxes:
+        cls_id = int(box.cls[0])
+        conf = float(box.conf[0])
+        if conf < confidence_threshold:
+            continue
+
+        coords = box.xyxy[0].tolist()
+        if scale != 1.0:
+            coords = [coord / scale for coord in coords]
+
+        label = model.names[cls_id]
+        if label == "person":
+            people.append({"box": coords, "confidence": conf, "helmet": False, "is_rider": False})
+        elif label in {"motorcycle", "motorbike"}:
+            motorcycles.append({"box": coords, "confidence": conf})
+
+    groups = _associate_people_to_bikes(people, motorcycles)
+
+    for group in groups:
+        for rider in group["riders"]:
+            rider["is_rider"] = True
+            rider["helmet"] = _approximate_helmet(frame, rider["box"])
+
+    return people, motorcycles, groups
+
+
 def _draw_panel(frame: np.ndarray, total_count: int, labels: Dict[str, int], timestamp: str) -> None:
     overlay = frame.copy()
     cv2.rectangle(overlay, (24, 20), (470, 210), (10, 12, 28), -1)
@@ -175,6 +242,12 @@ def process_video(input_path: str, output_path: str, snapshot_dir: str) -> Dict[
     violation_snapshots = []
     frame_index = 0
     sample_interval = max(1, int(fps))
+    detection_interval = _env_int("DETECTION_FRAME_SKIP", 5)
+    inference_width = _env_int("DETECTION_INFERENCE_WIDTH", 480)
+    confidence_threshold = _env_float("DETECTION_CONFIDENCE", 0.35)
+    people = []
+    motorcycles = []
+    groups = []
     last_violation_snapshot_path = None
     last_violation_types = []
     last_violation_timestamp = None
@@ -184,32 +257,17 @@ def process_video(input_path: str, output_path: str, snapshot_dir: str) -> Dict[
         if not ok:
             break
 
-        results = model(frame, verbose=False)[0]
-        people = []
-        motorcycles = []
         frame_violations = []
         check_frame = frame_index % sample_interval == 0
+        should_detect = frame_index == 0 or frame_index % detection_interval == 0
 
-        for box in results.boxes:
-            cls_id = int(box.cls[0])
-            conf = float(box.conf[0])
-            if conf < 0.35:
-                continue
-
-            coords = box.xyxy[0].tolist()
-            label = model.names[cls_id]
-
-            if label == "person":
-                people.append({"box": coords, "confidence": conf, "helmet": False, "is_rider": False})
-            elif label in {"motorcycle", "motorbike"}:
-                motorcycles.append({"box": coords, "confidence": conf})
-
-        groups = _associate_people_to_bikes(people, motorcycles)
-
-        for group in groups:
-            for rider in group["riders"]:
-                rider["is_rider"] = True
-                rider["helmet"] = _approximate_helmet(frame, rider["box"])
+        if should_detect:
+            people, motorcycles, groups = _run_detection(
+                model=model,
+                frame=frame,
+                inference_width=inference_width,
+                confidence_threshold=confidence_threshold,
+            )
 
         for person in people:
             x1, y1, x2, y2 = map(int, person["box"])
@@ -297,7 +355,8 @@ def process_video(input_path: str, output_path: str, snapshot_dir: str) -> Dict[
 
     mail_sent = False
     mail_error = ""
-    if last_violation_snapshot_path and any(labels.values()):
+    email_enabled = os.getenv("ENABLE_EMAIL_ALERTS", "0") == "1"
+    if email_enabled and last_violation_snapshot_path and any(labels.values()):
         mail_sent, mail_error = send_violation_alert(
             violation_types=last_violation_types,
             timestamp=last_violation_timestamp or datetime.now().strftime("%d %b %Y %I:%M:%S %p"),
@@ -314,6 +373,8 @@ def process_video(input_path: str, output_path: str, snapshot_dir: str) -> Dict[
             else "No violation email was sent because no alert condition was triggered."
         )
     )
+    if any(labels.values()) and not email_enabled:
+        mail_message = "Violation detected. Email alerts are disabled for faster analysis."
 
     return {
         "success": True,
