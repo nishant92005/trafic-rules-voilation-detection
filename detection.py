@@ -355,7 +355,7 @@ def process_video(input_path: str, output_path: str, snapshot_dir: str) -> Dict[
 
     mail_sent = False
     mail_error = ""
-    email_enabled = os.getenv("ENABLE_EMAIL_ALERTS", "0") == "1"
+    email_enabled = os.getenv("ENABLE_EMAIL_ALERTS", "1") == "1"
     if email_enabled and last_violation_snapshot_path and any(labels.values()):
         mail_sent, mail_error = send_violation_alert(
             violation_types=last_violation_types,
