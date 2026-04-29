@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+.venv/
+.uv-cache/
+__pycache__/
+*.pyc
+outputs/
+uploads/
+.ultralytics/
+yolov8n.pt

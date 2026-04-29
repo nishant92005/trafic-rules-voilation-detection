@@ -1,0 +1,109 @@
+# AI Traffic Violation Detection System
+
+Flask-based computer vision demo for:
+
+- Helmet violation detection
+- Triple riding detection
+- Processed video output with overlays
+- SMTP alert integration with optional GROQ-generated email text
+
+## Project Structure
+
+- `app.py`
+- `detection.py`
+- `email_alert.py`
+- `templates/index.html`
+- `static/css/styles.css`
+- `static/js/app.js`
+- `uploads/`
+- `outputs/`
+
+## Frontend Stack
+
+- HTML
+- Tailwind CSS via CDN
+- Vanilla JavaScript
+- Three.js via CDN for the animated hero object
+
+No Tailwind build step is required for this demo.
+
+## Run Locally
+
+1. Activate the virtual environment:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+2. Start the Flask app:
+
+```powershell
+python app.py
+```
+
+3. Open:
+
+```text
+http://127.0.0.1:5000
+```
+
+## Optional Environment Variables
+
+Set these if you want email alerts and GROQ-generated email bodies:
+
+```powershell
+$env:SMTP_SERVER="smtp.gmail.com"
+$env:SMTP_PORT="587"
+$env:SMTP_USER="your_email@example.com"
+$env:SMTP_PASSWORD="your_app_password"
+$env:SENDER_EMAIL="your_email@example.com"
+$env:RECEIVER_EMAIL="receiver@example.com"
+
+$env:GROQ_API_KEY="your_groq_api_key"
+$env:GROQ_MODEL="llama3-8b-8192"
+```
+
+## Notes
+
+- The first detection run may download `yolov8n.pt` if it is not already cached.
+- Helmet detection is an approximation built on top of person and motorcycle detection plus head-region analysis.
+- Processed videos are written to `outputs/`.
+- Uploaded source videos are written to `uploads/`.
+
+## Deploy on Render
+
+This repo is configured for Render with:
+
+- `requirements.txt`
+- `.python-version`
+- `render.yaml`
+- a health endpoint at `/healthz`
+
+### Recommended deploy steps
+
+1. Push this project to GitHub.
+2. Sign in to Render.
+3. Create a new Blueprint or Web Service from the repo.
+4. Render should detect:
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `gunicorn app:app`
+5. Add these environment variables in Render:
+
+```text
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=llama3-8b-8192
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SENDER_EMAIL=your_email@example.com
+SENDER_PASSWORD=your_gmail_app_password
+RECEIVER_EMAIL=receiver@example.com
+FLASK_DEBUG=0
+PYTHON_VERSION=3.11.11
+```
+
+### Important deployment notes
+
+- Render's current default Python version is `3.14.3`, so this project pins Python `3.11` because PyTorch/Ultralytics is more reliable there.
+- `uploads/` and `outputs/` are ephemeral on Render unless you attach a persistent disk.
+- If you want processed videos and snapshots to survive restarts and redeploys, add a persistent disk in Render.
+- This project uses YOLO and OpenCV, so a paid Render instance is more realistic than a tiny free instance for video processing workloads.

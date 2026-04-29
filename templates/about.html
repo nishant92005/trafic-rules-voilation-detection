@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Nishant Sharma</title>
+    <meta name="theme-color" content="#050816">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        midnight: "#050816",
+                        electric: "#59f3ff",
+                        pulse: "#8b5cf6",
+                        flare: "#ff4fb3",
+                    },
+                    boxShadow: {
+                        glow: "0 0 34px rgba(89, 243, 255, 0.22)",
+                        intense: "0 28px 90px rgba(6, 11, 30, 0.55)",
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+</head>
+<body class="bg-midnight text-white">
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <div class="cursor-glow" id="cursor-glow"></div>
+    <div class="particles-layer" id="about-particles"></div>
+    <div class="ambient-orb ambient-orb--cyan"></div>
+    <div class="ambient-orb ambient-orb--purple"></div>
+    <div class="ambient-orb ambient-orb--pink"></div>
+
+    <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/45 backdrop-blur-2xl">
+        <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
+            <a href="/" class="flex items-center gap-3">
+                <span class="brand-mark">NS</span>
+                <div>
+                    <p class="brand-kicker">Nishant Sharma</p>
+                    <p class="brand-subtitle">Developer Portfolio</p>
+                </div>
+            </a>
+            <div class="hidden items-center gap-7 md:flex">
+                <a href="#intro" class="nav-link">Intro</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="#contact" class="hidden sm:inline-flex hero-button hero-button--ghost">Connect</a>
+                <button
+                    id="about-mobile-menu-button"
+                    type="button"
+                    class="mobile-menu-button md:hidden"
+                    aria-expanded="false"
+                    aria-controls="about-mobile-menu"
+                    aria-label="Toggle navigation menu"
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+        <div id="about-mobile-menu" class="mobile-menu md:hidden" hidden>
+            <a href="#intro" class="mobile-menu__link">Intro</a>
+            <a href="#contact" class="mobile-menu__link">Contact</a>
+            <a href="/" class="mobile-menu__link">Home</a>
+            <a href="#contact" class="mobile-menu__cta">Connect</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="intro" class="mx-auto grid min-h-screen max-w-7xl items-center gap-16 px-6 pb-20 pt-28 lg:grid-cols-[1.05fr_0.95fr] lg:px-10">
+            <div class="reveal">
+                <p class="section-kicker">Portfolio • AI • Systems • Creativity</p>
+                <h1 class="font-sora text-5xl font-extrabold leading-tight sm:text-6xl xl:text-7xl">
+                    Hi, I'm Nishant Sharma
+                    <span class="inline-block">👋</span>
+                </h1>
+                <p class="mt-6 max-w-2xl text-lg leading-8 text-white/70 sm:text-xl">
+                    <span id="typing-line"></span>
+                </p>
+                <p class="mt-8 max-w-2xl text-base leading-8 text-white/62">
+                    I build sharp, real-world software systems with a strong focus on AI, automation, polished interfaces, and practical products that actually solve problems.
+                </p>
+                <div class="mt-10 flex flex-wrap gap-4">
+                    <a href="#contact" class="hero-button">Connect With Me</a>
+                    <a href="#contact" class="hero-button hero-button--ghost">Let's Collaborate</a>
+                </div>
+                <div class="mt-12 grid gap-4 sm:grid-cols-3">
+                    <div class="hero-stat reveal delay-1">
+                        <strong>AI + ML</strong>
+                        <span>System-driven problem solving</span>
+                    </div>
+                    <div class="hero-stat reveal delay-2">
+                        <strong>Full Stack</strong>
+                        <span>Backend logic with polished UI</span>
+                    </div>
+                    <div class="hero-stat reveal delay-3">
+                        <strong>Content</strong>
+                        <span>YouTube, editing, storytelling</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="profile-shell">
+                    <div class="profile-ring"></div>
+                    <div class="profile-card">
+                        <img src="{{ url_for('static', filename='img/nishant-profile.jpeg') }}" alt="Nishant Sharma profile photo" class="profile-image">
+                        <div class="profile-panel">
+                            <div>
+                                <p class="panel-kicker">Current Focus</p>
+                                <h2 class="font-sora text-2xl font-semibold">AI Systems + Clean Product Design</h2>
+                            </div>
+                            <div class="mini-grid">
+                                <div class="mini-card">
+                                    <span class="mini-card__label">Role</span>
+                                    <strong>AI Developer</strong>
+                                </div>
+                                <div class="mini-card">
+                                    <span class="mini-card__label">Style</span>
+                                    <strong>Builder Mindset</strong>
+                                </div>
+                                <div class="mini-card">
+                                    <span class="mini-card__label">Energy</span>
+                                    <strong>Creative + Practical</strong>
+                                </div>
+                                <div class="mini-card mini-card--highlight">
+                                    <span class="mini-card__label">Mission</span>
+                                    <strong>Real-world Solutions</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="mx-auto max-w-7xl px-6 py-16 lg:px-10">
+            <div class="contact-shell reveal">
+                <div>
+                    <p class="section-kicker">Contact</p>
+                    <h2 class="section-title">Let's build something smart and memorable</h2>
+                    <p class="mt-5 max-w-2xl leading-8 text-white/65">
+                        Available for collaboration on AI systems, full stack builds, experimental interfaces, and practical automation projects.
+                    </p>
+                </div>
+                <div class="contact-grid">
+                    <a href="mailto:nishant92005@gmail.com" class="contact-card">
+                        <span class="contact-icon">EM</span>
+                        <div>
+                            <strong>Email</strong>
+                            <p>nishant92005@gmail.com</p>
+                        </div>
+                    </a>
+                    <a href="https://github.com/nishant92005" class="contact-card" target="_blank" rel="noreferrer">
+                        <span class="contact-icon">GH</span>
+                        <div>
+                            <strong>GitHub</strong>
+                            <p>github.com/nishant92005</p>
+                        </div>
+                    </a>
+                    <a href="https://www.linkedin.com/in/nishant-sh4rma/" class="contact-card" target="_blank" rel="noreferrer">
+                        <span class="contact-icon">in</span>
+                        <div>
+                            <strong>LinkedIn</strong>
+                            <p>linkedin.com/in/nishant-sh4rma</p>
+                        </div>
+                    </a>
+                    <a href="#contact" class="contact-card">
+                        <span class="contact-icon">NS</span>
+                        <div>
+                            <strong>Nishant Sharma</strong>
+                            <p>Open to smart collaborations and creative builds</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/10 bg-slate-950/28">
+        <div class="mx-auto max-w-7xl px-6 py-8 text-center text-sm text-white/48 lg:px-10">
+            Built with passion by Nishant Sharma 🚀
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/about.js') }}"></script>
+</body>
+</html>

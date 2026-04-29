@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">AI Traffic Violation Detection favicon</title>
+  <desc id="desc">Neon traffic monitoring icon with a camera lens, road lanes, and alert signal.</desc>
+  <defs>
+    <linearGradient id="bg" x1="12" y1="8" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0d1734"/>
+      <stop offset="0.55" stop-color="#091024"/>
+      <stop offset="1" stop-color="#040816"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="16" y1="10" x2="52" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#59f3ff"/>
+      <stop offset="0.52" stop-color="#47a6ff"/>
+      <stop offset="1" stop-color="#ff58be"/>
+    </linearGradient>
+    <linearGradient id="core" x1="24" y1="20" x2="42" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9cfaff"/>
+      <stop offset="0.55" stop-color="#59f3ff"/>
+      <stop offset="1" stop-color="#5271ff"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="5" y="5" width="54" height="54" rx="16" fill="url(#bg)"/>
+  <rect x="6.5" y="6.5" width="51" height="51" rx="14.5" fill="none" stroke="url(#ring)" stroke-width="3"/>
+
+  <circle cx="32" cy="31" r="13.5" fill="#081223" stroke="url(#ring)" stroke-width="2.5"/>
+  <circle cx="32" cy="31" r="8.5" fill="url(#core)" filter="url(#glow)"/>
+  <circle cx="32" cy="31" r="3.4" fill="#ecfeff"/>
+
+  <path d="M20 19.5h7.5" stroke="#59f3ff" stroke-width="2.4" stroke-linecap="round" opacity=".95"/>
+  <path d="M36.5 19.5H44" stroke="#ff58be" stroke-width="2.4" stroke-linecap="round" opacity=".92"/>
+  <path d="M18 46.5h10" stroke="#59f3ff" stroke-width="2.2" stroke-linecap="round" opacity=".9"/>
+  <path d="M36 46.5h8" stroke="#8b5cf6" stroke-width="2.2" stroke-linecap="round" opacity=".88"/>
+
+  <path d="M24.5 12.5 18.5 7.5" stroke="#59f3ff" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+  <path d="M45.5 51.5 51.5 56.5" stroke="#ff58be" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+
+  <path d="M15.5 41.5c2-4.1 6.2-6.9 10.9-6.9" stroke="#ffd166" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <path d="M48.5 21.5c-2 4.1-6.2 6.9-10.9 6.9" stroke="#ffd166" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+
+  <circle cx="47.5" cy="16.5" r="7.5" fill="#ff4c81"/>
+  <path d="M47.5 12.8v5.2" stroke="#fff7fb" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="47.5" cy="20.9" r="1.4" fill="#fff7fb"/>
+</svg>
